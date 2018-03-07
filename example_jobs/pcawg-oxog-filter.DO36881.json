@@ -1,0 +1,5 @@
+{
+    "workflow_name": "pcawg-oxog-filter",
+    "icgc_donor_id": "DO36881",
+    "local_input_dir": "/data/DO36881/input_dir/"
+}
