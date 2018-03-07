@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import sys
 from utils import get_task_dict, save_output_json
@@ -7,8 +9,8 @@ import subprocess
 task_dict = get_task_dict(sys.argv[1])
 cwd = os.getcwd()
 
-job_file = task_dict.get('job_file')
-wf_file = task_dict.get('wf_file')
+job_file = task_dict.get('input').get('job_file')
+wf_file = task_dict.get('input').get('wf_file')
 
 success = True  # assume task complete
 stdout = ''
