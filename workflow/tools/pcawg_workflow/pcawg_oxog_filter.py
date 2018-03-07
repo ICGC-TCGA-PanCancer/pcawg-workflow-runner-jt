@@ -33,8 +33,8 @@ class PcawgOxogFilter(PcawgWorkflow):
         os.makedirs(self.ref_path)
         # download it from ICGC Data Portal
         data_url = 'https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-broad/pcawg_broad_public_refs_full.tar.gz'
-        r = requests.get(data_url)
-        local_file = 'pcawg_broad_public_refs_full.tar.gz'
+        r = requests.get(data_url, stream=True)
+        local_file = os.path.join(self.ref_path, 'pcawg_broad_public_refs_full.tar.gz')
         with open(local_file, 'wb') as f:
             for chunk in r.iter_content(chunk_size=1024):
                 if chunk:  # filter out keep-alive new chunks
@@ -42,7 +42,7 @@ class PcawgOxogFilter(PcawgWorkflow):
 
         success = True
         stdout, stderr = '', ''
-        p = subprocess.Popen(["tar xf %s" % local_file],
+        p = subprocess.Popen(["tar -xf %s -C %s" % (local_file, self.ref_path)],
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         try:
             stdout, stderr = p.communicate()
@@ -78,7 +78,7 @@ class PcawgOxogFilter(PcawgWorkflow):
             if f.endswith('.bam'):
                 input_bam = f
                 tumourId = os.path.splitext(input_bam)[0]
-            elif f.endswith('.vcf.gz'):
+            elif f.endswith('.somatic.snv_mnv.vcf.gz'):
                 input_vcfs.append(f)
 
         if not input_bam or not input_vcfs:
