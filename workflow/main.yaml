@@ -1,0 +1,63 @@
+# PCAWG workflow
+
+workflow:
+  name:  pcawg-workflow-runner
+  version: "0.0.1"
+  execution:
+    constraint: same_executor  # other values: 'shared_fs', 'same_host'
+    memory: 2g
+    cpu: 1
+  input:
+    workflow_name:
+      type: string
+    workflow_version:
+      type: string
+    icgc_donor_id:
+      type: string
+    local_input_dir:
+      type: string
+      is_dir: true
+  tasks:
+    provision_workflow_files:
+      tool: pcawg-data-provisioner
+      input:
+        workflow_name: workflow_name
+        workflow_version: workflow_version
+        icgc_donor_id: icgc_donor_id
+        local_input_dir: local_input_dir
+      depends_on: null
+    run_workflow:
+      tool: workflow_runner
+      input:
+        wf_file: wf_file@provision_workflow_files
+        job_file: job_file@provision_workflow_files
+tools:
+  pcawg-data-provisioner:
+    command: pcawg-data-provisioner.py
+    input:
+      workflow_name:
+        type: string
+      workflow_version:
+        type: string
+        is_option: true
+      icgc_donor_id:
+        type: string
+      local_input_dir:
+        type: string
+        is_dir: true
+    output:
+      wf_file:
+        type: string
+        is_file: true
+      job_file:
+        type: string
+        is_file: true
+  workflow_runner:
+    command: workflow_runner.py
+    input:
+      wf_file:
+        type: string
+        is_file: true
+      job_file:
+        type: string
+        is_file: true
