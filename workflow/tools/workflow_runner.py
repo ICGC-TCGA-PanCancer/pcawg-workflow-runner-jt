@@ -24,7 +24,6 @@ except Exception as e:
     success = False  # task failed
 
 if p.returncode != 0 or success is False:
-    success = False
     with open('cwltool.stdout.txt', 'w') as o:
         o.write(stdout.decode("utf-8"))
     with open('cwltool.stderr.txt', 'w') as e:

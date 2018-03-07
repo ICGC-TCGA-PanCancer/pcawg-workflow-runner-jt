@@ -1,10 +1,10 @@
 import os
 from os import listdir
+import sys
 from shutil import copyfile, rmtree
 import requests
-import zipfile
-from io import BytesIO
 import json
+import subprocess
 from .pcawg_workflow import PcawgWorkflow
 
 GitRepo = "https://github.com/ICGC-TCGA-PanCancer/pcawg-oxog-filter"
@@ -33,9 +33,30 @@ class PcawgOxogFilter(PcawgWorkflow):
         os.makedirs(self.ref_path)
         # download it from ICGC Data Portal
         data_url = 'https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-broad/pcawg_broad_public_refs_full.tar.gz'
-        request = requests.get(data_url)
-        zfile = zipfile.ZipFile(BytesIO(request.content))
-        zfile.extractall(self.ref_path)
+        r = requests.get(data_url)
+        local_file = 'pcawg_broad_public_refs_full.tar.gz'
+        with open(local_file, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:  # filter out keep-alive new chunks
+                    f.write(chunk)
+
+        success = True
+        stdout, stderr = '', ''
+        p = subprocess.Popen(["tar xf %s" % local_file],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        try:
+            stdout, stderr = p.communicate()
+        except Exception as e:
+            success = False  # task failed
+
+        if p.returncode != 0 or success is False:
+            with open('tar.stdout.txt', 'w') as o:
+                o.write(stdout.decode("utf-8"))
+            with open('tar.stderr.txt', 'w') as e:
+                e.write(stderr.decode("utf-8"))
+            sys.exit(1)
+
+        # now it must have succeeded
         open(ref_data_provision_flag_file, 'w').close()  # create the flag
 
     def _download_input_data(self):
