@@ -28,14 +28,16 @@ def hyphen_to_camel_case(snake_str):
 
 
 
-def download_file_from_url(url, output_dir, filename=None,force=False):
-    if os.path.isfile(os.path.join(output_dir,filename)) and force == False:
+def download_file_from_url(url, output_dir, force=False):
+    filename = os.path.basename(urlparse(url))
+
+    if os.path.join(output_dir,filename) and force == False:
         return
 
     response = requests.get(url, stream=True)
     response.raise_for_status()
 
-    with open(os.path.join(output_dir, filename), 'wb') as handle:
+    with open(os.path.join(output_dir, filename)) as handle:
         for block in response.iter_content(1024):
             handle.write(block)
 
@@ -48,7 +50,7 @@ def download_file_from_gnos(credentials_file, file_path, output_dir):
         raise Exception("Docker is not installed.")
 
     subprocess.check_output(['docker','pull','quay.io/pancancer/gtclient'])
-    subprocess.check_output(['docker','run','-v',output_dir+':/output','-v',os.path.dirname(credentials_file)+':/app','quay.io/pancancer/gtclient','gtdownload','-p','/output','-c','/app/'+os.path.basename(credentials_file), file_path])
+    subprocess.check_output(['docker','-v',os.path.dirname(credentials_file)+':/app','-v',output_dir+':/output','run','quay.io/pancancer/gtclient','gtdownload','-p','/output','-c','/app/'+os.path.basename(credentials_file), file_path])
 
 def extract_bgzip_file(file_path, output_dir, force=False):
     if not file_path.endswith('.gz'):
