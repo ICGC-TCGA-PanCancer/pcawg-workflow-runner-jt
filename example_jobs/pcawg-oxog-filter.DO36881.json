@@ -45,7 +45,7 @@
     "inputFileDirectory": {
       "class": "Directory",
       "path": "{{local_path.input_data}}",
-      "location": "{{local_input_dir}}"
+      "location": "{{local_path.input_data}}"
     },
     "tumours":
     [
