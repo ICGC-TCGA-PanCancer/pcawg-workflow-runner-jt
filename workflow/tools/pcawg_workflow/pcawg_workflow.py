@@ -12,16 +12,21 @@ logger.addHandler(fh)
 
 class PcawgWorkflow(object):
     __metaclass__ = ABCMeta
-
-    def __init__(self, icgc_donor_id, local_input_dir):
+    def __init__(self, workflow_type=None, metadata=dict(),
+                 metadata_service=dict(), local_path=dict(), output=dict(),
+                 job_file_template=dict()
+                ):
         self._wf_name = None
         self._git_repo = None
         self._wf_file = None
         self._job_file = None
         self._wf_version = None
-        self._icgc_donor_id = icgc_donor_id
-        self._local_input_dir = local_input_dir
-        self._ref_path = os.path.abspath(os.path.join(os.getcwd(), '..', '..', '..', 'reference-data'))
+        self._wf_type = workflow_type
+        self._metadata = metadata
+        self._metadata_service = metadata_service
+        self._local_path = local_path
+        self._output = output
+        self._job_file_template = job_file_template
         self._logger = logger
 
     @property
@@ -41,6 +46,10 @@ class PcawgWorkflow(object):
         return self._job_file
 
     @property
+    def job_file_template(self):
+        return self._job_file_template
+
+    @property
     def wf_version(self):
         return self._wf_version
 
@@ -53,12 +62,24 @@ class PcawgWorkflow(object):
         return self._git_repo
 
     @property
-    def icgc_donor_id(self):
-        return self._icgc_donor_id
+    def wf_type(self):
+        return self._wf_type
 
     @property
-    def local_input_dir(self):
-        return self._local_input_dir
+    def metadata(self):
+        self._metadata = metadata
+
+    @property
+    def metadata_service(self):
+        self._metadata_service = metadata_service
+
+    @property
+    def local_path(self):
+        self._local_path = local_path
+
+    @property
+    def output(self):
+        self._output = output
 
     def provision_files(self):
         # download workflow code first

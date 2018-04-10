@@ -17,6 +17,8 @@ workflow:
     local_input_dir:
       type: string
       is_dir: true
+    job_file_template:
+      type: object
   tasks:
     provision_workflow_files:
       tool: pcawg-data-provisioner
@@ -25,6 +27,7 @@ workflow:
         workflow_version: workflow_version
         icgc_donor_id: icgc_donor_id
         local_input_dir: local_input_dir
+        job_file_template: job_file_template
       depends_on: null
     run_workflow:
       tool: workflow_runner
@@ -45,6 +48,8 @@ tools:
       local_input_dir:
         type: string
         is_dir: true
+      job_file_template:
+        type: object
     output:
       wf_file:
         type: string

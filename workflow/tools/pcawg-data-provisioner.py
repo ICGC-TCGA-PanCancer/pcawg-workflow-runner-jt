@@ -12,13 +12,25 @@ cwd = os.getcwd()
 
 workflow_name = task_dict.get('input').get('workflow_name')
 workflow_version = task_dict.get('input').get('workflow_version')
-icgc_donor_id = task_dict.get('input').get('icgc_donor_id')
-local_input_dir = task_dict.get('input').get('local_input_dir')
+workflow_type = task_dict.get('input').get('workflow_type')
+metadata = task_dict.get('input').get('metadata')
+metadata_service = task_dict.get('input').get('metadata_service')
+local_path = task_dict.get('input').get('local_path')
+output = task_dict.get('input').get('output')
+job_file_template = task_dict.get('job_file_template')
 
 workflow_class_name = hyphen_to_camel_case(workflow_name)
 
 provisioner_class = eval(workflow_class_name)
-provisioner = provisioner_class(workflow_version, icgc_donor_id, local_input_dir)
+provisioner = provisioner_class(
+                                workflow_version=workflow_version,
+                                workflow_type=workflow_type,
+                                metadata=metadata,
+                                metadata_service=metadata_service,
+                                local_path=local_path,
+                                output=output,
+                                job_file_template=job_file_template
+                                )
 provisioner.provision_files()
 
 output_json = {

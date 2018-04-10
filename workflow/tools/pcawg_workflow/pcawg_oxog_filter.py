@@ -13,13 +13,19 @@ WorkflowFileName = "pcawg_oxog_wf.cwl"
 
 
 class PcawgOxogFilter(PcawgWorkflow):
-    def __init__(self, version, icgc_donor_id, local_input_dir):
-        super(PcawgOxogFilter, self).__init__(icgc_donor_id, local_input_dir)
+    def __init__(self, workflow_version=None, workflow_type=None, metadata=dict(),
+                 metadata_service=dict(), local_path=dict(), output=dict(),
+                 job_file_template=dict()
+                ):
+        super(PcawgOxogFilter, self).__init__(workflow_type=workflow_type, metadata=metadata,
+                     metadata_service=metadata_service, local_path=local_path, output=output,
+                     job_file_template=job_file_template)
         self._wf_version = version if version else Version
         self._wf_name = 'pcawg-oxog-filter'
         self._git_repo = GitRepo
         self._wf_file = os.path.join(os.getcwd(), "%s-%s" % (self.wf_name, self.wf_version), WorkflowFileName)
         self._job_file = os.path.join(os.getcwd(), 'job.json')
+
 
     def _download_ref_data(self):
         self.logger.info('download reference data: %s, version: %s' % (self.wf_name, self.wf_version))

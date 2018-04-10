@@ -1,5 +1,62 @@
 {
-    "workflow_name": "pcawg-oxog-filter",
+  "workflow_name": "pcawg-oxog-filter",
+  "workflow_version": "1.0.0",
+  "workflow_type": "cwl",
+  "metadata": {
     "icgc_donor_id": "DO36881",
-    "local_input_dir": "/data/DO36881/input_dir/"
+  },
+  "metadata_service": {
+    "url": "https://dcc.icgc.org/api/v1/repository/files",
+    "params": {
+      "filters": {
+        "donor": {
+          "id": {
+            "is": ["{{metadata.icgc_donor_id}}"]
+          }
+        },
+        "file": {
+          "study": {
+            "is": ["PCAWG"]
+          }
+        }
+      },
+      "size": 500
+    }
+  },
+  "local_path": {
+    "reference_data": "/data/jt-store/{{workflow_name}}",
+    "input_data": "/data/jt-store/data/{{metadata.icgc_donor_id}}/{{workflow_name}}/{{workflow_version}}/input",
+    "output_data": "/data/jt-store/data/{{metadata.icgc_donor_id}}/{{workflow_name}}/{{workflow_version}}/output"
+  },
+  "output": {
+    "file_patterns": ["*.vcf.gz", "*.vcf.gz.tbi", "*.vcf.gz.idx"]
+  },
+  "job_file_template": {
+    "refFile": {
+      "path": "https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-broad/pcawg_broad_public_refs_full.tar.gz:public/Homo_sapiens_assembly19.fasta",
+      "class": "File"
+    },
+    "out_dir": "/var/spool/cwl/",
+    "refDataDir": {
+      "class": "Directory",
+      "path": "{{local_path.reference_data}}",
+      "location": "{{local_path.reference_data}}"
+    },
+    "inputFileDirectory": {
+      "class": "Directory",
+      "path": "{{local_path.input_data}}",
+      "location": "{{local_input_dir}}"
+    },
+    "tumours":
+    [
+      {
+        "tumourId": "ba0abfb2-6d70-4787-8ea7-b84be875083d",
+        "bamFileName": "gnos://osdc-tcga/*:PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e.bam",
+        "associatedVcfs": [
+          "gnos://osdc-tcga/*:ba0abfb2-6d70-4787-8ea7-b84be875083d.*.somatic.snv_mnv.vcf.gz"
+        ],
+        "oxoQScore": 38.59
+      }
+    ]
+  }
 }
