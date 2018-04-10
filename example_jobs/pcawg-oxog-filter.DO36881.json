@@ -51,12 +51,12 @@
     [
       {
         "tumourId": "8853cbee-7931-49a6-b063-a806943a10ad",
-        "bamFileName": "gnos://osdc-tcga/*:PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e.bam",
+        "bamFileName": "gnos://pcawg-chicago-tcga/*:PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e.bam",
         "associatedVcfs": [
-          "gnos://osdc-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.broad-*.somatic.snv_mnv.vcf.gz",
-          "gnos://osdc-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.svcp_*.somatic.snv_mnv.vcf.gz",
-          "gnos://osdc-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.MUSE_*.somatic.snv_mnv.vcf.gz",
-          "gnos://osdc-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.dkfz-*.somatic.snv_mnv.vcf.gz"
+          "gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.broad-*.somatic.snv_mnv.vcf.gz",
+          "gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.svcp_*.somatic.snv_mnv.vcf.gz",
+          "gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.MUSE_*.somatic.snv_mnv.vcf.gz",
+          "gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.dkfz-*.somatic.snv_mnv.vcf.gz"
         ],
         "oxoQScore": 38.59
       }
