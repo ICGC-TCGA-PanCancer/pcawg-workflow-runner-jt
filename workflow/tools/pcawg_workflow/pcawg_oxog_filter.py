@@ -6,6 +6,7 @@ import requests
 import json
 import subprocess
 from .pcawg_workflow import PcawgWorkflow
+from ..utils import generate_job_from_template
 
 GitRepo = "https://github.com/ICGC-TCGA-PanCancer/pcawg-oxog-filter"
 Version = "1.0.0"
@@ -78,6 +79,11 @@ class PcawgOxogFilter(PcawgWorkflow):
                 copyfile(os.path.join(self.local_input_dir, file_), os.path.join(os.getcwd(), file_))
 
     def _generate_job_json(self):
+        values = {
+            'local_path.reference_data': self.ref_path,
+            'local_path.input_data': os.getcwd()
+
+        }
         input_bam = None
         input_vcfs = []
         for f in [f for f in os.listdir('.') if os.path.isfile(f)]:
