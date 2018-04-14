@@ -48,6 +48,10 @@ class PcawgCocleaning(PcawgWorkflow):
         download_file_from_url('https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz', os.getcwd(), 'Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz')
         download_file_from_url('https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz.tbi', os.getcwd(), 'Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz.tbi')
 
+        # Download dbsnp_132_b37.leftAligned.vcf.gz file
+        download_file_from_url('https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/dbsnp_132_b37.leftAligned.vcf.gz', os.getcwd(), 'dbsnp_132_b37.leftAligned.vcf.gz')
+        download_file_from_url('https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/dbsnp_132_b37.leftAligned.vcf.gz.tbi', os.getcwd(), 'dbsnp_132_b37.leftAligned.vcf.gz.tbi')
+
         # Extract genome.fa.gz file
         extract_bgzip_file(os.path.join(os.getcwd(),'genome.fa.gz'),os.getcwd())
 
