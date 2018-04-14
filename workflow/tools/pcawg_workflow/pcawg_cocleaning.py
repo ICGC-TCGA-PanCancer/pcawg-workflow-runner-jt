@@ -4,7 +4,7 @@
 import os
 import requests
 from .pcawg_workflow import PcawgWorkflow
-from utils import download_file_from_url, download_file_from_gnos, extract_bgzip_file
+from .utils import download_file_from_url, download_file_from_gnos, extract_bgzip_file
 import json
 import shutil
 

@@ -2,7 +2,8 @@
 
 import os
 import sys
-from utils import get_task_dict, save_output_json, hyphen_to_camel_case
+from utils import get_task_dict, save_output_json
+from pcawg_workflow.utils import hyphen_to_camel_case
 from pcawg_workflow.pcawg_cocleaning import PcawgCocleaning
 from pcawg_workflow.pcawg_oxog_filter import PcawgOxogFilter
 from pcawg_workflow.pcawg_snv_indel_annotation import PcawgSnvIndelAnnotation

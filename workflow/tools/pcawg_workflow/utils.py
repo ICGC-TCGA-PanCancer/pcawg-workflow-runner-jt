@@ -6,42 +6,24 @@ import subprocess
 import tarfile
 
 
-def get_task_dict(json_string):
-    try:
-        task_dict = json.loads(json_string)
-    except:
-        return {}
-
-    return task_dict
-
-
-def save_output_json(output_dict={}):
-    with open('output.json', 'w') as f:
-        f.write(json.dumps(output_dict, indent=2))
-
-
 def hyphen_to_camel_case(snake_str):
     components = snake_str.split('-')
     return ''.join(x.title() for x in components)
 
 
-
-
-
-def download_file_from_url(url, output_dir, force=False):
-    filename = os.path.basename(urlparse(url))
-
-    if os.path.join(output_dir,filename) and force == False:
+def download_file_from_url(url, output_dir, filename=None, force=False):
+    if os.path.isfile(os.path.join(output_dir, filename)) and force == False:
         return
 
     response = requests.get(url, stream=True)
     response.raise_for_status()
 
-    with open(os.path.join(output_dir, filename)) as handle:
+    with open(os.path.join(output_dir, filename), 'wb') as handle:
         for block in response.iter_content(1024):
             handle.write(block)
 
     return os.path.join(output_dir, filename)
+
 
 def download_file_from_gnos(credentials_file, file_path, output_dir):
     try:
@@ -49,8 +31,9 @@ def download_file_from_gnos(credentials_file, file_path, output_dir):
     except OSError as e:
         raise Exception("Docker is not installed.")
 
-    subprocess.check_output(['docker','pull','quay.io/pancancer/gtclient'])
-    subprocess.check_output(['docker','-v',os.path.dirname(credentials_file)+':/app','-v',output_dir+':/output','run','quay.io/pancancer/gtclient','gtdownload','-p','/output','-c','/app/'+os.path.basename(credentials_file), file_path])
+    subprocess.check_output(['docker','pull','quay.io/pancancer/gtclient:0.1'])
+    subprocess.check_output(['docker','run','-v',output_dir+':/output','-v',os.path.dirname(credentials_file)+':/app','quay.io/pancancer/gtclient:0.1','gtdownload','-p','/output','-c','/app/'+os.path.basename(credentials_file), file_path])
+
 
 def extract_bgzip_file(file_path, output_dir, force=False):
     if not file_path.endswith('.gz'):
