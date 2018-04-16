@@ -7,7 +7,7 @@ workflow:
     constraint: same_executor  # other values: 'shared_fs', 'same_host'
     memory: 2g
     cpu: 1
-  input:
+  input:  # TODO: need to update this input fields
     workflow_name:
       type: string
     workflow_version:
@@ -21,7 +21,7 @@ workflow:
       type: object
   tasks:
     provision_workflow_files:
-      tool: pcawg-data-provisioner
+      tool: pcawg-job-provisioner
       input:
         workflow_name: workflow_name
         workflow_version: workflow_version
@@ -35,8 +35,8 @@ workflow:
         wf_file: wf_file@provision_workflow_files
         job_file: job_file@provision_workflow_files
 tools:
-  pcawg-data-provisioner:
-    command: pcawg-data-provisioner.py
+  pcawg-job-provisioner:
+    command: pcawg-job-provisioner.py
     input:
       workflow_name:
         type: string
