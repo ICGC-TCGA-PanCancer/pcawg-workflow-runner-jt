@@ -1,0 +1,68 @@
+{
+  "workflow": {
+    "name": "pcawg-gatk-cocleaning",
+    "version": "1.0.0",
+    "type": "cwl",
+    "workflowfile_name": "gatk-cocleaning-workflow.cwl",
+    "repo_url": "https://github.com/ICGC-TCGA-PanCancer/pcawg-gatk-cocleaning"
+  },
+  "metadata": {
+    "pipeline": "PCAWG",
+    "job_partiption_key": "DO36881"
+  },
+  "metadata_service": {
+    "url": "https://dcc.icgc.org/api/v1/repository/files",
+    "params": {
+      "filters": {
+        "donor": {
+          "id": {
+            "is": ["{{metadata.job_partiption_key}}"]
+          }
+        },
+        "file": {
+          "study": {
+            "is": ["PCAWG"]
+          }
+        }
+      },
+      "size": 500
+    }
+  },
+  "output": {
+    "file_patterns": ["*.bam", "[*.bam.bai](*.bai)"]
+  },
+  "job_file_template": {
+    "tumor_bam": {
+      "location": "gnos://pcawg-chicago-tcga/*:PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e.bam",
+      "class": "File"
+    },
+    "normal_bam": {
+      "location": "gnos://pcawg-chicago-tcga/*:PCAWG.71481425-8371-4e2f-be7f-22ef1883af87.bam",
+      "class": "File"
+    },
+    "knownSites": [
+      {
+        "class": "File",
+        "location": "[dbsnp_132_b37.leftAligned.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/dbsnp_132_b37.leftAligned.vcf.gz)"
+      }
+    ],
+    "knownIndels": [
+      {
+        "class": "File",
+        "location": "[1000G_phase1.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/1000G_phase1.indels.hg19.sites.fixed.vcf.gz)"
+      },
+      {
+        "class": "File",
+        "location": "[Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz)"
+      }
+    ],
+    "reference": {
+      "class": "File",
+      "location": "[genome.fa](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz:genome.fa)",
+      "_secondaryFiles": [
+        "[genome.fa.fai](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz.fai)",
+        "https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.dict"
+      ]
+    }
+  }
+}
