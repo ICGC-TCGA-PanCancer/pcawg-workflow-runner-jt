@@ -34,8 +34,7 @@
   "job_file_template": {
     "refFile": {
       "path": "[{{_reference_path}}/.](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-broad/pcawg_broad_public_refs_full.tar.gz:public/Homo_sapiens_assembly19.fasta)",
-      "class": "File",
-      "_is_reference": true
+      "class": "File"
     },
     "out_dir": "/var/spool/cwl/",
     "refDataDir": {
