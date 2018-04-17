@@ -43,25 +43,25 @@
     "knownSites": [
       {
         "class": "File",
-        "location": "[dbsnp_132_b37.leftAligned.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/dbsnp_132_b37.leftAligned.vcf.gz)"
+        "location": "[{{_reference_path}}/dbsnp_132_b37.leftAligned.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/dbsnp_132_b37.leftAligned.vcf.gz)"
       }
     ],
     "knownIndels": [
       {
         "class": "File",
-        "location": "[1000G_phase1.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/1000G_phase1.indels.hg19.sites.fixed.vcf.gz)"
+        "location": "[{{_reference_path}}/1000G_phase1.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/1000G_phase1.indels.hg19.sites.fixed.vcf.gz)"
       },
       {
         "class": "File",
-        "location": "[Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz)"
+        "location": "[{{_reference_path}}/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz)"
       }
     ],
     "reference": {
       "class": "File",
-      "location": "[genome.fa](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz:genome.fa)",
+      "location": "[{{_reference_path}}/genome.fa](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz:genome.fa)",
       "_secondaryFiles": [
-        "[genome.fa.fai](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz.fai)",
-        "https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.dict"
+        "[{{_reference_path}}/genome.fa.fai](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz.fai)",
+        "[{{_reference_path}}/.](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.dict)"
       ]
     }
   }
