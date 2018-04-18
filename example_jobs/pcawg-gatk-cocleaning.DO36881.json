@@ -16,7 +16,7 @@
       "filters": {
         "donor": {
           "id": {
-            "is": ["{{metadata.job_partiption_key}}"]
+            "is": ["DO36881"]
           }
         },
         "file": {
@@ -33,35 +33,35 @@
   },
   "job_file_template": {
     "tumor_bam": {
-      "location": "gnos://pcawg-chicago-tcga/*:PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e.bam",
+      "location": "{File}[](gnos://pcawg-chicago-tcga/*:PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e.bam)",
       "class": "File"
     },
     "normal_bam": {
-      "location": "gnos://pcawg-chicago-tcga/*:PCAWG.71481425-8371-4e2f-be7f-22ef1883af87.bam",
+      "location": "{File}[]{gnos://pcawg-chicago-tcga/*:PCAWG.71481425-8371-4e2f-be7f-22ef1883af87.bam)",
       "class": "File"
     },
     "knownSites": [
       {
         "class": "File",
-        "location": "[{{_reference_path}}/dbsnp_132_b37.leftAligned.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/dbsnp_132_b37.leftAligned.vcf.gz)"
+        "location": "{File}[{{_reference_path}}/dbsnp_132_b37.leftAligned.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/dbsnp_132_b37.leftAligned.vcf.gz)"
       }
     ],
     "knownIndels": [
       {
         "class": "File",
-        "location": "[{{_reference_path}}/1000G_phase1.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/1000G_phase1.indels.hg19.sites.fixed.vcf.gz)"
+        "location": "{File}[{{_reference_path}}/1000G_phase1.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/1000G_phase1.indels.hg19.sites.fixed.vcf.gz)"
       },
       {
         "class": "File",
-        "location": "[{{_reference_path}}/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz)"
+        "location": "{File}[{{_reference_path}}/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-gatk-cocleaning/Mills_and_1000G_gold_standard.indels.hg19.sites.fixed.vcf.gz)"
       }
     ],
     "reference": {
       "class": "File",
-      "location": "[{{_reference_path}}/genome.fa](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz:genome.fa)",
+      "location": "{File}[{{_reference_path}}/genome.fa](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz:genome.fa)",
       "_secondaryFiles": [
-        "[{{_reference_path}}/genome.fa.fai](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz.fai)",
-        "[{{_reference_path}}/.](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.dict)"
+        "{File}[{{_reference_path}}/genome.fa.fai](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.fa.gz.fai)",
+        "{File}[{{_reference_path}}/genome.dict](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-bwa-mem/genome.dict)"
       ]
     }
   }

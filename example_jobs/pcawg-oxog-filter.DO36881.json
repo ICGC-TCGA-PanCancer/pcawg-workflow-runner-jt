@@ -16,7 +16,7 @@
       "filters": {
         "donor": {
           "id": {
-            "is": ["{{metadata.job_partiption_key}}"]
+            "is": ["DO36881"]
           }
         },
         "file": {
@@ -33,7 +33,7 @@
   },
   "job_file_template": {
     "refFile": {
-      "path": "[{{_reference_path}}/.](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-broad/pcawg_broad_public_refs_full.tar.gz:public/Homo_sapiens_assembly19.fasta)",
+      "path": "{File}[{{_reference_path}}/](https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/pcawg-broad/pcawg_broad_public_refs_full.tar.gz:public/Homo_sapiens_assembly19.fasta)",
       "class": "File"
     },
     "out_dir": "/var/spool/cwl/",
@@ -51,12 +51,12 @@
     [
       {
         "tumourId": "PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e",
-        "bamFileName": "[{{_input_path}}/.](gnos://pcawg-chicago-tcga/*:PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e.bam)",
+        "bamFileName": "{File}[{{_input_path}}/](gnos://pcawg-chicago-tcga/*:PCAWG.c44b8511-615b-45c2-b848-ac4a419e307e.bam)",
         "associatedVcfs": [
-          "[{{_input_path}}/.](gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.broad-*.somatic.snv_mnv.vcf.gz)",
-          "[{{_input_path}}/.](gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.svcp_*.somatic.snv_mnv.vcf.gz)",
-          "[{{_input_path}}/.](gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.MUSE_*.somatic.snv_mnv.vcf.gz)",
-          "[{{_input_path}}/.](gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.dkfz-*.somatic.snv_mnv.vcf.gz)"
+          "{File}[{{_input_path}}/](gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.broad-*.somatic.snv_mnv.vcf.gz)",
+          "{File}[{{_input_path}}/](gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.svcp_*.somatic.snv_mnv.vcf.gz)",
+          "{File}[{{_input_path}}/](gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.MUSE_*.somatic.snv_mnv.vcf.gz)",
+          "{File}[{{_input_path}}/](gnos://pcawg-chicago-tcga/*:8853cbee-7931-49a6-b063-a806943a10ad.dkfz-*.somatic.snv_mnv.vcf.gz)"
         ],
         "oxoQScore": 38.59
       }

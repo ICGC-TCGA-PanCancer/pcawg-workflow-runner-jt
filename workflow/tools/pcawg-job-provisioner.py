@@ -5,8 +5,72 @@ import sys
 import requests
 import zipfile
 from io import BytesIO
+import json
+import re
+import subprocess
 
 from utils import get_task_dict, save_output_json, get_input_path, get_output_path, get_reference_path
+
+def parse_input_file(filename):
+    fname = filename[filename.find("(") + 1:filename.find(")")]
+    type = filename[filename.find("{") + 1:filename.find("}")]
+    repo_code = None
+    out_dir = filename[filename.find("[") + 1:filename.find("]")]
+    url = None
+    out_fname = fname.split(':')[-1]
+    if fname.startswith('gnos://'):
+        repo_code = fname.split('/')[2]
+    elif fname.startswith('https://'):
+        url = fname
+    return {
+        'source': fname.split('://')[0],
+        'repo_code': repo_code,
+        'type': type,
+        'url': url,
+        'out_file': out_dir,
+        'fname_pattern': out_fname,
+        'placeholder':filename
+    }
+
+def array_contains(fname, array_of_contains):
+    for string_contain in array_of_contains:
+        if string_contain not in fname:
+            return False
+    return True
+
+
+def get_gnos_urls(fname_pattern, metadata_url):
+    copies = []
+    for hit in json.loads(requests.get(metadata_url).text).get('hits'):
+        for file_copy in hit.get('fileCopies'):
+            if array_contains(file_copy.get('fileName'), fname_pattern.split('*')):
+                copies.append({'name':file_copy.get('fileName'),'url':file_copy.get('repoBaseUrl')+file_copy.get('repoDataPath')+file_copy.get("repoDataBundleId")})
+    return copies
+
+def walk_dict2(d, metadata_url, keys=[]):
+    for key, value in d.items():
+        if isinstance(value, dict):
+            keys = walk_dict2(value, metadata_url, keys + [key])
+        elif isinstance(value, list):
+            for item in value:
+                keys = walk_dict2({key:item}, metadata_url, keys + [key])
+        else:
+            pattern = re.compile("\{.*\}\[.*\](.*)")
+            if pattern.match(str(value)):
+                file_info = parse_input_file(value)
+                if file_info.get('source') == 'gnos':
+                    gnos_info = get_gnos_urls(file_info.get('fname_pattern'), metadata_url)
+    return keys[:-1]
+
+def download_https_file(url):
+    r = requests.get(url, stream=True)
+    with open('tmp', 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+
+def download_gnos_file(path_to_key,data_download_uri):
+    subprocess.check_output(['gtdownload','-c',path_to_key, data_download_uri])
 
 
 task_dict = get_task_dict(sys.argv[1])
