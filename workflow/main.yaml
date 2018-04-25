@@ -8,25 +8,69 @@ workflow:
     memory: 2g
     cpu: 1
   input:  # TODO: need to update this input fields
-    workflow_name:
-      type: string
-    workflow_version:
-      type: string
-    icgc_donor_id:
-      type: string
-    local_input_dir:
-      type: string
-      is_dir: true
+    workflow:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        type:
+          type: string
+        workflowfile_name:
+          type: string
+        repo_url:
+          type: string
+    metadata:
+      type: object
+        properties:
+          pipeline:
+            type: string
+          job_partiption_key:
+            type: string
+    metadata_service:
+      type: object
+        properties:
+          url:
+            type: string
+          params:
+            type: object
+            properties:
+              filters:
+                type: object
+                properties:
+                  donor:
+                    type: object
+                    properties:
+                      id:
+                        type: object
+                        properties:
+                          is:
+                            type: array
+                  file:
+                    type: object
+                    properties:
+                      study:
+                        type: object
+                        properties:
+                        id:
+                          is: array
+              size:
+                type: int
+    output:
+      type: object
+      properties:
+        file_patterns:
+          type: array
     job_file_template:
       type: object
   tasks:
     provision_workflow_files:
       tool: pcawg-job-provisioner
       input:
-        workflow_name: workflow_name
-        workflow_version: workflow_version
-        icgc_donor_id: icgc_donor_id
-        local_input_dir: local_input_dir
+        workflow: workflow
+        metadata: metadata
+        metadata_service: metadata_service
         job_file_template: job_file_template
       depends_on: null
     run_workflow:
@@ -39,15 +83,11 @@ tools:
     command: pcawg-job-provisioner.py
     input:
       workflow_name:
-        type: string
-      workflow_version:
-        type: string
-        is_option: true
-      icgc_donor_id:
-        type: string
-      local_input_dir:
-        type: string
-        is_dir: true
+        type: object
+      metadata:
+        type: object
+      metadata_service:
+        type: object
       job_file_template:
         type: object
     output:
