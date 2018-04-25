@@ -1,76 +1,13 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-import requests
-import zipfile
-from io import BytesIO
 import json
 import re
-import subprocess
+import sys
+import zipfile
+from io import BytesIO
 
-from utils import get_task_dict, save_output_json, get_input_path, get_output_path, get_reference_path
-
-def parse_input_file(filename):
-    fname = filename[filename.find("(") + 1:filename.find(")")]
-    type = filename[filename.find("{") + 1:filename.find("}")]
-    repo_code = None
-    out_dir = filename[filename.find("[") + 1:filename.find("]")]
-    url = None
-    out_fname = fname.split(':')[-1]
-    if fname.startswith('gnos://'):
-        repo_code = fname.split('/')[2]
-    elif fname.startswith('https://'):
-        url = fname
-    return {
-        'source': fname.split('://')[0],
-        'repo_code': repo_code,
-        'type': type,
-        'url': url,
-        'out_file': out_dir,
-        'fname_pattern': out_fname,
-        'placeholder':filename
-    }
-
-def array_contains(fname, array_of_contains):
-    for string_contain in array_of_contains:
-        if string_contain not in fname:
-            return False
-    return True
-
-
-def get_gnos_urls(fname_pattern, metadata_url):
-    copies = []
-    for hit in json.loads(requests.get(metadata_url).text).get('hits'):
-        for file_copy in hit.get('fileCopies'):
-            if array_contains(file_copy.get('fileName'), fname_pattern.split('*')):
-                copies.append({'name':file_copy.get('fileName'),'url':file_copy.get('repoBaseUrl')+file_copy.get('repoDataPath')+file_copy.get("repoDataBundleId")})
-    return copies
-
-def walk_dict2(d, metadata_url, keys=[]):
-    for key, value in d.items():
-        if isinstance(value, dict):
-            keys = walk_dict2(value, metadata_url, keys + [key])
-        elif isinstance(value, list):
-            for item in value:
-                keys = walk_dict2({key:item}, metadata_url, keys + [key])
-        else:
-            pattern = re.compile("\{.*\}\[.*\](.*)")
-            if pattern.match(str(value)):
-                file_info = parse_input_file(value)
-                if file_info.get('source') == 'gnos':
-                    gnos_info = get_gnos_urls(file_info.get('fname_pattern'), metadata_url)
-    return keys[:-1]
-
-def download_https_file(url):
-    r = requests.get(url, stream=True)
-    with open('tmp', 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk:
-                f.write(chunk)
-
-def download_gnos_file(path_to_key,data_download_uri):
-    subprocess.check_output(['gtdownload','-c',path_to_key, data_download_uri])
+from operations import *
+from utils import get_task_dict, save_output_json, get_input_path, get_reference_path
 
 
 task_dict = get_task_dict(sys.argv[1])
@@ -101,6 +38,88 @@ git_download_url = "%s/archive/%s.zip" % (repo_url, workflow_version)
 request = requests.get(git_download_url)
 zfile = zipfile.ZipFile(BytesIO(request.content))
 zfile.extractall(os.getcwd())
+
+
+
+
+def parse_placeholder(placeholder):
+    _dict = {}
+    _dict['output_dir'] = placeholder[1]
+    _dict['output_type'] = placeholder[0]
+    _dict['url'] = ':'.join(placeholder[2].split(":")[:-1])
+    _dict['file_patterns'] = placeholder[2].split(':')[-1].split(',')
+    _dict['source'] = placeholder[2].split(':')[0]
+    _dict['placeholder'] = "{%s}[%s](%s)" % (placeholder[0], placeholder[1],placeholder[2])
+    return _dict
+
+def array_contains(fname, array_of_contains):
+    for string_contain in array_of_contains:
+        if string_contain not in fname:
+            return False
+    return True
+
+def get_gnos_urls(fname_pattern, metadata_url):
+    copies = []
+    for hit in json.loads(requests.get(metadata_url).text).get('hits'):
+        for file_copy in hit.get('fileCopies'):
+            if array_contains(file_copy.get('fileName'), fname_pattern.split('*')):
+                copies.append({'name':file_copy.get('fileName'),'url':file_copy.get('repoBaseUrl')+file_copy.get('repoDataPath')+file_copy.get("repoDataBundleId")})
+    return copies
+
+def convert_patterns(_file_info, metadata_url):
+    files = []
+    for pattern in _file_info.get('file_patterns'):
+        if _file_info.get('url').startswith('gnos'):
+            _file_info['url'] = get_gnos_urls(pattern,metadata_url)[0].get('url')
+    return _file_info
+
+
+job_dict = json.loads(sys.argv[1])
+size = str(job_dict.get('input').get('metadata_service').get('params').get('size'))
+filters = json.dumps(job_dict.get('input').get('metadata_service').get('params').get('filters'))
+metadata_url = str(
+    job_dict.get('input').get('metadata_service').get('url') + "?filters=" + filters.replace(' ', '') + "&size=" + size)
+
+data = sys.argv[1]
+
+_to_replace = []
+
+for _match in re.findall(r"\{\{.+?\}\}", data):
+    value = ""
+    if _match == "{{_reference_path}}":
+        value = os.getcwd()
+    elif _match == "{{_input_path}}":
+        value = os.getcwd()
+    _to_replace.append({'placeholder': _match, 'value': value})
+
+for l in _to_replace:
+    data = data.replace(l.get('placeholder'), l.get('value'))
+
+for _match in re.findall(r"\{(.+?)\}\[(.+?)\]\((.+?)\)", data):
+    _match_data = parse_placeholder(_match)
+    _match_data = convert_patterns(_match_data, metadata_url)
+
+    print("Downloading " + _match_data.get('url'))
+
+    if _match_data.get('url').endswith('.tar.gz'):
+        value = pipeline_download_decompress_mv(_match_data.get('url'), _match_data.get('source'),
+                                                _match_data.get('file_patterns'), _match_data.get('output_dir'),
+                                                _match_data.get('output_type'))
+    else:
+        value = pipeline_download_mv(_match_data.get('url'), _match_data.get('source'),
+                                     _match_data.get('file_patterns')[0], _match_data.get('output_dir'),
+                                     _match_data.get('output_type'))
+
+    _to_replace.append({'placeholder': _match_data.get('placeholder'), 'value': value})
+exit()
+
+for l in _to_replace:
+    data = data.replace(l.get('placeholder'),l.get('value'))
+
+with open(job_file, 'w') as outfile:
+    json.dump(data,outfile)
+
+
 
 
 output_json = {

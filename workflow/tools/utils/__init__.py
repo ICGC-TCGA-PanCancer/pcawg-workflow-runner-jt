@@ -46,7 +46,7 @@ def get_workflow_path(pipeline, job_partiption_key, workflow_name, workflow_vers
         exit(1)  # should never happen
 
     jthome = os.sep.join(path_list)
-    return os.sep.join(jthome + ['data', 'pipeline.%s' % pipeline,
+    return os.sep.join([jthome,'data', 'pipeline.%s' % pipeline,
                                 job_partiption_key, workflow_name,
                                 workflow_version])
 
