@@ -1,0 +1,101 @@
+{
+  "workflow": {
+    "name": "pcawg-snv-indel-annotation",
+    "version": "1.0.0",
+    "type": "cwl",
+    "workflowfile_name": "pcawg_annotate_wf.cwl",
+    "repo_url": "https://github.com/ICGC-TCGA-PanCancer/pcawg-snv-indel-annotation"
+  },
+  "metadata": {
+    "pipeline": "PCAWG",
+    "job_partiption_key": "DO36572"
+  },
+  "metadata_service": {
+    "url": "https://dcc.icgc.org/api/v1/repository/files",
+    "params": {
+      "filters": {
+        "donor": {
+          "id": {
+            "is": [
+              "DO36572"
+            ]
+          }
+        },
+        "file": {
+          "study": {
+            "is": [
+              "PCAWG"
+            ]
+          }
+        }
+      },
+      "size": 500
+    }
+  },
+  "output": {
+    "file_patterns": [
+      "*.bam",
+      "[*.bam.bai](*.bai)"
+    ]
+  },
+  "job_file_template": {
+
+    "refFile": {
+        "path": "/ref/public/Homo_sapiens_assembly19.fasta",
+        "class": "File"
+    },
+    "tumourBams": [
+        {
+            "path": "{path}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/PCAWG.60512b58-f0d6-45ce-9b98-d83457481d61_minibam.bam:PCAWG.60512b58-f0d6-45ce-9b98-d83457481d61_minibam.bam)",
+            "class": "File"
+        }
+    ],
+    "normalBam": {
+        "path": "{path}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/PCAWG.aeab4756-0c2c-4117-ac11-ff6bcbe86104_minibam.bam:PCAWG.aeab4756-0c2c-4117-ac11-ff6bcbe86104_minibam.bam)",
+        "class": "File"
+    },
+    "tumours":
+    [
+        {
+            "tumourId": "PCAWG.60512b58-f0d6-45ce-9b98-d83457481d61_minibam.bam",
+            "bamFileName": "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/PCAWG.60512b58-f0d6-45ce-9b98-d83457481d61_minibam.bam:PCAWG.60512b58-f0d6-45ce-9b98-d83457481d61_minibam.bam)",
+            "associatedVcfs":
+            [
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.broad-dRanger_snowman.20150918.somatic.sv.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.broad-dRanger_snowman.20150918.somatic.sv.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.broad-snowman.20150918.somatic.indel.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.broad-snowman.20150918.somatic.indel.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.dkfz-indelCalling_1-0-132-1-hpc.1508061841.somatic.indel.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.dkfz-indelCalling_1-0-132-1-hpc.1508061841.somatic.indel.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.dkfz-snvCalling_1-0-132-1-hpc.1508061841.somatic.snv_mnv.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.dkfz-snvCalling_1-0-132-1-hpc.1508061841.somatic.snv_mnv.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.embl-delly_1-0-0-preFilter-hpc.150628.somatic.sv.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.embl-delly_1-0-0-preFilter-hpc.150628.somatic.sv.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.MUSE_1-0rc-vcf.20150918.somatic.snv_mnv.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.MUSE_1-0rc-vcf.20150918.somatic.snv_mnv.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.smufin.20160127.somatic.indel.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.smufin.20160127.somatic.indel.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.svcp_1-0-5.20150403.somatic.indel.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.svcp_1-0-5.20150403.somatic.indel.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.svcp_1-0-5.20150403.somatic.snv_mnv.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.svcp_1-0-5.20150403.somatic.snv_mnv.vcf.gz)",
+                "{name}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.svfix2_4-0-12.20160208.somatic.sv.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.svfix2_4-0-12.20160208.somatic.sv.vcf.gz)"
+            ],
+            "oxoQScore":40.04
+        }
+    ],
+    "out_dir": "/var/spool/cwl/",
+    "inputFileDirectory": {
+        "class":"Directory",
+        "path":"/home/ubuntu/Donors/DO36572",
+        "location":"/home/ubuntu/Donors/DO36572"
+    },
+    "oxogVCFs":
+    [
+        {
+            "path": "{path}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.svcp_1-0-5.20150403.somatic.snv_mnv.pass-filtered.cleaned.oxoG.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.svcp_1-0-5.20150403.somatic.snv_mnv.pass-filtered.cleaned.oxoG.vcf.gz)",
+            "class": "File"
+        },
+        {
+            "path": "{path}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.dkfz-snvCalling_1-0-132-1-hpc.1508061841.somatic.snv_mnv.pass-filtered.cleaned.oxoG.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.dkfz-snvCalling_1-0-132-1-hpc.1508061841.somatic.snv_mnv.pass-filtered.cleaned.oxoG.vcf.gz)",
+            "class": "File"
+        },
+        {
+            "path": "{path}[{{_reference_path}}](file:///home/ubuntu/Donors/DO36572/7d59205a-65ec-4341-9748-28639d82ed29.broad-mutect-v3.20160222.somatic.snv_mnv.pass-filtered.cleaned.oxoG.vcf.gz:7d59205a-65ec-4341-9748-28639d82ed29.broad-mutect-v3.20160222.somatic.snv_mnv.pass-filtered.cleaned.oxoG.vcf.gz)",
+            "class": "File"
+        }
+    ]
+}
+}
