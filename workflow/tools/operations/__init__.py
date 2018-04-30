@@ -53,3 +53,9 @@ def pipeline_download_mv(url, source, filename, output_dir, output_type='path',k
     if output_type == 'path':
         return os.path.abspath(os.path.join(output_dir, filename))
     return filename
+
+def pipeline_nothing(url, source, filename, output_type):
+    if source == 'file':
+        if output_type == 'path':
+            return url.replace('file://','')
+        return filename

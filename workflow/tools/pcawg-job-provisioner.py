@@ -70,43 +70,39 @@ def convert_patterns(_file_info, metadata_url):
 
 
 job_dict = json.loads(sys.argv[1])
-size = str(metadata_service.get('params').get('size'))
-filters = json.dumps(metadata_service.get('params').get('filters'))
+size = str(job_dict.get('metadata_service').get('params').get('size'))
+filters = json.dumps(job_dict.get('metadata_service').get('params').get('filters'))
 metadata_url = str(
-    metadata_service.get('url') + "?filters=" + filters.replace(' ', '') + "&size=" + size)
+    job_dict.get('metadata_service').get('url') + "?filters=" + filters.replace(' ', '') + "&size=" + size)
 
-data = sys.argv[1]
+with open('annotation_test.json', 'r') as _f:
+    data = _f.read()
 
 _to_replace = []
 
-for _match in re.findall(r"\{\{.+?\}\}", data):
-    value = ""
-    if _match == "{{_reference_path}}":
-        value = os.getcwd()
-    elif _match == "{{_input_path}}":
-        value = os.getcwd()
-    _to_replace.append({'placeholder': _match, 'value': value})
+for _match in re.findall(r"\{\{.*\}\}", data):
+    _to_replace.append({'placeholder': _match, 'value': 'tmp'})
 
 for l in _to_replace:
     data = data.replace(l.get('placeholder'), l.get('value'))
 
-for _match in re.findall(r"\{(.+?)\}\[(.+?)\]\((.+?)\)", data):
+for _match in list(set(re.findall(r"\{(.+?)\}\[(.+?)\]\((.+?)\)", data))):
     _match_data = parse_placeholder(_match)
     _match_data = convert_patterns(_match_data, metadata_url)
-
-    print("Downloading " + _match_data.get('url'))
 
     if _match_data.get('url').endswith('.tar.gz'):
         value = pipeline_download_decompress_mv(_match_data.get('url'), _match_data.get('source'),
                                                 _match_data.get('file_patterns'), _match_data.get('output_dir'),
                                                 _match_data.get('output_type'))
+    elif _match_data.get('source') == "file":
+        value = pipeline_nothing(_match_data.get('url'), _match_data.get('source'), _match_data.get('file_patterns'),
+                                 _match_data.get('output_type'))
     else:
         value = pipeline_download_mv(_match_data.get('url'), _match_data.get('source'),
-                                     _match_data.get('file_patterns')[0], _match_data.get('output_dir'),
+                                     _match_data.get('file_patterns'), _match_data.get('output_dir'),
                                      _match_data.get('output_type'))
 
     _to_replace.append({'placeholder': _match_data.get('placeholder'), 'value': value})
-exit()
 
 for l in _to_replace:
     data = data.replace(l.get('placeholder'),l.get('value'))
