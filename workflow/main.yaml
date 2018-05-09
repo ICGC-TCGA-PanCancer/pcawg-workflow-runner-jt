@@ -23,40 +23,23 @@ workflow:
           type: string
     metadata:
       type: object
-        properties:
-          pipeline:
-            type: string
-          job_partiption_key:
-            type: string
+      properties:
+        pipeline:
+          type: string
+        job_partiption_key:
+          type: string
     metadata_service:
       type: object
-        properties:
-          url:
-            type: string
-          params:
-            type: object
-            properties:
-              filters:
-                type: object
-                properties:
-                  donor:
-                    type: object
-                    properties:
-                      id:
-                        type: object
-                        properties:
-                          is:
-                            type: array
-                  file:
-                    type: object
-                    properties:
-                      study:
-                        type: object
-                        properties:
-                        id:
-                          is: array
-              size:
-                type: int
+      properties:
+        url:
+          type: string
+        params:
+          type: object
+          properties:
+            filters:
+              type: object
+            size:
+              type: integer
     output:
       type: object
       properties:
